@@ -25,6 +25,7 @@ interface IndexableConfItem {
 export declare type NginxConfItem = NginxConfItemApi & IndexableConfItem & NginxConfItemProps;
 interface AddOptions {
     isVerbatim?: boolean;
+    insertIndex?: number;
 }
 export declare class NginxConfFile extends events.EventEmitter {
     readonly tab: string;

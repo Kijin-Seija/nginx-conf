@@ -40,7 +40,7 @@ const blacklistedNames = {
     _addVerbatimBlock: 1,
     __isBlock: 1,
 };
-const createConfItem = (file, target, node, isRoot = false) => {
+const createConfItem = (file, target, node, isRoot = false, insertIndex = -1) => {
     const name = node.name;
     let value = node.value;
     const children = node.children;
@@ -74,7 +74,7 @@ const createConfItem = (file, target, node, isRoot = false) => {
                 isVerbatim: !!options.isVerbatim,
                 isBlock: !!children,
                 parent: null,
-            });
+            }, false, options.insertIndex || -1);
             file.emit('added', node);
             return item;
         },
@@ -171,7 +171,10 @@ const createConfItem = (file, target, node, isRoot = false) => {
     if (name) {
         const existing = target[name];
         if (existing) {
-            existing.push(item);
+            if (insertIndex > -1)
+                existing.splice(insertIndex, 0, item);
+            else
+                existing.push(item);
         }
         else if (!isRoot) {
             // this whole interface is kinda weird, but basically the "root"

@@ -52,6 +52,7 @@ export type NginxConfItem = NginxConfItemApi & IndexableConfItem & NginxConfItem
 
 interface AddOptions {
 	isVerbatim?: boolean;
+	insertIndex?: number;
 }
 
 const createConfItem = (
@@ -59,6 +60,7 @@ const createConfItem = (
 	target: IndexableConfItem,
 	node: NginxParseTreeNode,
 	isRoot = false,
+	insertIndex = -1
 ): NginxConfItem => {
 	const name = node.name;
 	let value = node.value;
@@ -101,7 +103,7 @@ const createConfItem = (
 				isVerbatim: !!options.isVerbatim,
 				isBlock: !!children,
 				parent: null,
-			});
+			}, false, options.insertIndex || -1);
 			file.emit('added', node);
 
 			return item;
@@ -212,7 +214,8 @@ const createConfItem = (
 	if (name) {
 		const existing = target[name];
 		if (existing) {
-			existing.push(item);
+			if (insertIndex > -1) existing.splice(insertIndex, 0, item);
+			else existing.push(item);
 		} else if (!isRoot) {
 			// this whole interface is kinda weird, but basically the "root"
 			// is treated differently as it's just attached to the NginxConfFile

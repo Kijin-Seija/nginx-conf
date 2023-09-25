@@ -1,6 +1,6 @@
 {
-	"name": "nginx-conf",
-	"version": "2.1.0",
+	"name": "nginx-conf-kijin",
+	"version": "2.2.0-beta1",
 	"description": "Dynamically update nginx configuration files via programmatic API",
 	"license": "MIT",
 	"keywords": [
